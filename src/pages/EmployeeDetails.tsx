@@ -14,7 +14,8 @@ import {
   Clock,
   User as UserIcon,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Plus
 } from 'lucide-react';
 import { format } from 'date-fns';
 

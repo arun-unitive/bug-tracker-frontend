@@ -127,7 +127,7 @@ const Layout = () => {
   const profileImageUrl = (() => {
     const raw = user?.profilePhoto;
     if (!isMeaningfulProfilePhoto(raw)) return null;
-    const v = raw.trim();
+    const v = raw!.trim();
 
     // If backend already returns a full URL, use it as-is.
     if (v.startsWith('http://') || v.startsWith('https://')) return v;

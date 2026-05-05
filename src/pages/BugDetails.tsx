@@ -15,7 +15,8 @@ import {
   ExternalLink,
   ZoomIn,
   X,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Trash2
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import ImageViewer from '../components/ImageViewer';
@@ -31,6 +32,7 @@ const BugDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isImageViewerOpen, setImageViewerOpen] = useState(false);
   const [viewerImageUrl, setViewerImageUrl] = useState<string | null>(null);
 
@@ -111,6 +113,19 @@ const BugDetails = () => {
       alert('Failed to update status');
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this bug?')) return;
+    setIsDeleting(true);
+    try {
+      await api.delete(`/bugs/${id}`);
+      navigate(-1);
+    } catch (err) {
+      alert('Failed to delete bug');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -514,6 +529,16 @@ const BugDetails = () => {
               </div>
             )}
 
+            {(role === 'Tester' || role === 'Admin') && (
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 transition-all"
+              >
+                {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                {isDeleting ? 'Deleting...' : 'Delete Bug'}
+              </button>
+            )}
             <div className="pt-6 border-t space-y-4">
               <div className="space-y-2">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Reported By</h3>

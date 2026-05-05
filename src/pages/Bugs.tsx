@@ -38,6 +38,7 @@ const Bugs = () => {
   const [updatingBugId, setUpdatingBugId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'tile' | 'table'>('tile');
   const [currentPage, setCurrentPage] = useState(1);
+  const [deletingBugId, setDeletingBugId] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('All');
@@ -82,6 +83,20 @@ const Bugs = () => {
       setError(err.response?.data?.message || 'Failed to fetch bugs');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const deleteBug = async (bugId: string) => {
+    if (!window.confirm('Are you sure you want to delete this bug?')) return;
+    setDeletingBugId(bugId);
+    setError(null);
+    try {
+      await api.delete(`/bugs/${bugId}`);
+      await refetchBugs();
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to delete bug');
+    } finally {
+      setDeletingBugId(null);
     }
   };
 
@@ -260,7 +275,23 @@ const Bugs = () => {
                   : null}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-3">
+          <div className="flex flex-wrap gap-3 items-center justify-end">
+            <div className="flex gap-2">
+              <button
+                onClick={exportToExcel}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                <Download className="h-4 w-4" />
+                Excel
+              </button>
+              <button
+                onClick={exportToPDF}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                <Download className="h-4 w-4" />
+                PDF
+              </button>
+            </div>
             {user?.role === 'Tester' && (
               <Link
                 to="/bugs/new"
@@ -270,22 +301,15 @@ const Bugs = () => {
                 New Bug
               </Link>
             )}
-            <div className="flex gap-2">
-              <button
-                onClick={exportToExcel}
-                className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+            {user?.role === 'Admin' && (
+              <Link
+                to="/bugs/new"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
               >
-                <Download className="h-4 w-4" />
-                Excel
-              </button>
-              <button
-                onClick={exportToPDF}
-                className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
-              >
-                <Download className="h-4 w-4" />
-                PDF
-              </button>
-            </div>
+                <BugIcon className="h-4 w-4" />
+                New Bug
+              </Link>
+            )}
             {/* <div className="flex items-center gap-2">
               <button
                 onClick={() => setViewMode('tile')}
@@ -473,8 +497,7 @@ const Bugs = () => {
                             type="button"
                             disabled={
                               updatingBugId === bug._id ||
-                              bug.status !== 'Resolved' ||
-                              bug.status === 'Closed'
+                              bug.status !== 'Resolved'
                             }
                             onClick={(e) => {
                               e.preventDefault();
@@ -485,6 +508,21 @@ const Bugs = () => {
                             title="Close this bug"
                           >
                             Close
+                          </button>
+                        )}
+                        {(user?.role === 'Tester' || user?.role === 'Admin') && (
+                          <button
+                            type="button"
+                            disabled={deletingBugId === bug._id}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              deleteBug(bug._id);
+                            }}
+                            className="px-3 py-1 text-xs font-bold rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+                            title="Delete this bug"
+                          >
+                            Delete
                           </button>
                         )}
                       </div>
@@ -581,7 +619,7 @@ const Bugs = () => {
                             Resolve
                           </button>
                         )}
-                        {(user?.role === 'Tester' || user?.role === 'Admin') && bug.status === 'Resolved' && bug.status !== 'Closed' && (
+                        {(user?.role === 'Tester' || user?.role === 'Admin') && bug.status === 'Resolved' && (
                           <button
                             type="button"
                             disabled={updatingBugId === bug._id}
@@ -589,6 +627,16 @@ const Bugs = () => {
                             className="px-2 py-1 text-xs font-bold rounded bg-red-100 text-red-800 hover:bg-red-200 disabled:opacity-50"
                           >
                             Close
+                          </button>
+                        )}
+                        {(user?.role === 'Tester' || user?.role === 'Admin') && (
+                          <button
+                            type="button"
+                            disabled={deletingBugId === bug._id}
+                            onClick={() => deleteBug(bug._id)}
+                            className="px-2 py-1 text-xs font-bold rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+                          >
+                            Delete
                           </button>
                         )}
                         <ChevronRight className="h-3 w-3 text-gray-400" />
