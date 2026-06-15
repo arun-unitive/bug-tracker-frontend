@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { User, Project } from '../types';
 import { 
   Plus, 
@@ -132,7 +132,7 @@ const EditProject = () => {
     if (!photo) return null;
     if (photo.startsWith('http://') || photo.startsWith('https://')) return photo;
     const normalized = photo.startsWith('/') ? photo : `/${photo}`;
-    return `http://localhost:5000${normalized}`;
+    return `${SERVER_URL}${normalized}`;
   };
 
   const setProjectPhotoFromFile = (f: File | null) => {

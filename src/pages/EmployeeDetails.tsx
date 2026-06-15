@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { User, Project, Bug, Activity } from '../types';
 import { 
   Mail, 
@@ -97,7 +97,7 @@ const EmployeeDetails = () => {
                 <div className="h-24 w-24 rounded-full border-4 border-white bg-gray-100 overflow-hidden shadow-sm mx-auto lg:mx-0">
                   {user.profilePhoto ? (
                     <img 
-                      src={`http://localhost:5000${user.profilePhoto}`} 
+                      src={`${SERVER_URL}${user.profilePhoto}`} 
                       alt={user.name} 
                       className="h-full w-full object-cover" 
                     />

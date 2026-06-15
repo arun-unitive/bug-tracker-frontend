@@ -1,12 +1,18 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 
-const API_URL = 'https://bug-tracker-backend-iouf.onrender.com/api/';
+// const API_URL = 'https://bug-tracker-backend-iouf.onrender.com/api/';
 //const API_URL = 'http://localhost:5000/api/';
+ export const SERVER_URL = 'https://bug-tracker-backend-iouf.onrender.com';
+// export const SERVER_URL = 'http://localhost:5000';
+
+ const API_URL = `${SERVER_URL}/api/`;
 
 const api = axios.create({
   baseURL: API_URL,
 });
+
+console.log("API_URL is:", API_URL);
 
 // Add a request interceptor to add the auth token to every request
 api.interceptors.request.use(

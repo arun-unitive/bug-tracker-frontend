@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import api from '../services/api';
+import api,{SERVER_URL} from '../services/api';
 import type { Activity } from '../types';
 import { 
   BugIcon, 
@@ -134,7 +134,7 @@ const Layout = () => {
 
     // Otherwise treat it as an uploads path; handle missing leading slash.
     const normalized = v.startsWith('/') ? v : `/${v}`;
-    return `http://localhost:5000${normalized}`;
+    return `${SERVER_URL}${normalized}`;
   })();
 
   return (

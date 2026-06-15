@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api,{SERVER_URL} from '../services/api';
 import type { Bug, BugStatus, User } from '../types';
 import { 
   AlertCircle, 
@@ -303,13 +303,13 @@ const BugDetails = () => {
                 {bug.evidence.match(/\.(jpeg|jpg|png|gif)$/i) ? (
                   <div className="relative group rounded-lg overflow-hidden border">
                     <img 
-                      src={`http://localhost:5000${bug.evidence}`} 
+                      src={`${SERVER_URL}${bug.evidence}`} 
                       alt="Evidence" 
                       className="max-h-96 w-full object-contain bg-gray-50"
                     />
                     <button 
                       onClick={() => {
-                        setViewerImageUrl(`http://localhost:5000${bug.evidence}`);
+                        setViewerImageUrl(`${SERVER_URL}${bug.evidence}`);
                         setImageViewerOpen(true);
                       }}
                       className="absolute inset-0 bg-black/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
@@ -319,7 +319,7 @@ const BugDetails = () => {
                   </div>
                 ) : (
                   <a 
-                    href={`http://localhost:5000${bug.evidence}`} 
+                    href={`${SERVER_URL}${bug.evidence}`} 
                     target="_blank" 
                     rel="noreferrer"
                     className="flex items-center gap-2 p-3 bg-gray-50 border rounded-lg hover:bg-gray-100 transition-colors"
@@ -347,7 +347,7 @@ const BugDetails = () => {
                       <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-gray-100 overflow-hidden">
                           {comment.user?.profilePhoto ? (
-                            <img src={`http://localhost:5000${comment.user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                            <img src={`${SERVER_URL}${comment.user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                           ) : (
                             <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                               {comment.user?.name?.charAt(0) ?? ''}
@@ -366,13 +366,13 @@ const BugDetails = () => {
                           {comment.attachment.match(/\.(jpeg|jpg|png|gif)$/i) ? (
                             <button 
                               onClick={() => {
-                                setViewerImageUrl(`http://localhost:5000${comment.attachment}`);
+                                setViewerImageUrl(`${SERVER_URL}${comment.attachment}`);
                                 setImageViewerOpen(true);
                               }}
                               className="relative group block rounded-lg overflow-hidden border border-gray-100 max-w-[200px]"
                             >
                               <img 
-                                src={`http://localhost:5000${comment.attachment}`} 
+                                src={`${SERVER_URL}${comment.attachment}`} 
                                 alt="Comment attachment" 
                                 className="h-32 w-full object-cover group-hover:opacity-90 transition-opacity"
                               />
@@ -382,7 +382,7 @@ const BugDetails = () => {
                             </button>
                           ) : (
                             <a 
-                              href={`http://localhost:5000${comment.attachment}`} 
+                              href={`${SERVER_URL}${comment.attachment}`} 
                               target="_blank" 
                               rel="noreferrer"
                               className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border rounded-lg hover:bg-gray-100 transition-colors text-xs font-medium text-blue-600"
@@ -545,7 +545,7 @@ const BugDetails = () => {
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-gray-100 overflow-hidden">
                     {bug.createdBy.profilePhoto ? (
-                      <img src={`http://localhost:5000${bug.createdBy.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                      <img src={`${SERVER_URL}${bug.createdBy.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                         {bug.createdBy?.name?.charAt(0) ?? ''}
@@ -581,7 +581,7 @@ const BugDetails = () => {
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-gray-100 overflow-hidden">
                       {bug.assignedTo.profilePhoto ? (
-                        <img src={`http://localhost:5000${bug.assignedTo.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                        <img src={`${SERVER_URL}${bug.assignedTo.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                           {bug.assignedTo?.name?.charAt(0) ?? ''}
@@ -602,7 +602,7 @@ const BugDetails = () => {
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-gray-100 overflow-hidden">
                       {bug.resolvedBy.profilePhoto ? (
-                        <img src={`http://localhost:5000${bug.resolvedBy.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                        <img src={`${SERVER_URL}${bug.resolvedBy.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                           {bug.resolvedBy?.name?.charAt(0) ?? ''}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { User } from '../types';
 import { 
   Plus, 
@@ -59,7 +59,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSuccess, editUser = null }: { isO
         role: editUser.role,
         password: '', // Don't show existing password
       });
-      setPreview(editUser.profilePhoto ? `http://localhost:5000${editUser.profilePhoto}` : null);
+      setPreview(editUser.profilePhoto ? `${SERVER_URL}${editUser.profilePhoto}` : null);
     } else {
       reset({
         name: '',
@@ -400,7 +400,7 @@ const Employees = () => {
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-full bg-gray-100 overflow-hidden">
                         {user.profilePhoto ? (
-                          <img src={`http://localhost:5000${user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                          <img src={`${SERVER_URL}${user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                             {user.name.charAt(0)}

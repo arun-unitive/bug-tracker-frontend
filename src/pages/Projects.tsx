@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { Project } from '../types';
 import { 
   FolderKanban, 
@@ -27,7 +27,7 @@ const Projects = () => {
     // Normalize Windows backslashes and ensure leading slash for uploads paths.
     const cleaned = photo.replace(/\\/g, '/').trim();
     const normalized = cleaned.startsWith('/') ? cleaned : `/${cleaned}`;
-    return `http://localhost:5000${normalized}`;
+    return `${SERVER_URL}${normalized}`;
   };
 
   const fetchProjects = async () => {

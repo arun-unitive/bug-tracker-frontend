@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { Project, Bug, Activity } from '../types';
 import { 
   Calendar, 
@@ -49,7 +49,7 @@ const ProjectDetails = () => {
     if (photo.startsWith('http://') || photo.startsWith('https://')) return photo;
     const cleaned = photo.replace(/\\/g, '/').trim();
     const normalized = cleaned.startsWith('/') ? cleaned : `/${cleaned}`;
-    return `http://localhost:5000${normalized}`;
+    return `${SERVER_URL}${normalized}`;
   };
 
   useEffect(() => {
@@ -349,7 +349,7 @@ const ProjectDetails = () => {
                       )}
                       <div>
                         <a
-                          href={doc.type === 'file' ? `http://localhost:5000${doc.url}` : doc.url}
+                          href={doc.type === 'file' ? `${SERVER_URL}${doc.url}` : doc.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-sm font-medium text-gray-900 hover:text-primary"
@@ -526,7 +526,7 @@ const ProjectDetails = () => {
                 <div key={activity._id} className="p-4 flex gap-4 text-sm">
                   <div className="h-8 w-8 rounded-full bg-gray-100 overflow-hidden shrink-0">
                     {activity.user?.profilePhoto ? (
-                      <img src={`http://localhost:5000${activity.user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
+                      <img src={`${SERVER_URL}${activity.user.profilePhoto}`} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center text-xs font-bold text-gray-400">
                         {activity.user?.name.charAt(0)}

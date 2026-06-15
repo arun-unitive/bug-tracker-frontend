@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import api from '../services/api';
+import api, { SERVER_URL } from '../services/api';
 import type { Project, User } from '../types';
 import { useAuthStore } from '../store/useAuthStore';
 import {
@@ -96,7 +96,7 @@ const EditBug = () => {
 
         // If existing evidence is an image, show it in the preview area.
         if (bug.evidence && bug.evidence.match(/\.(jpeg|jpg|png|gif)$/i)) {
-          setPreview(`http://localhost:5000${bug.evidence}`);
+          setPreview(`${SERVER_URL}${bug.evidence}`);
         } else {
           setPreview(null);
         }
