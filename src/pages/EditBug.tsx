@@ -53,6 +53,7 @@ const EditBug = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<BugFormValues>({
     resolver: zodResolver(bugSchema),
@@ -71,6 +72,7 @@ const EditBug = () => {
   const selectedApplicationType = watch('applicationType');
   const savedApplicationTypeRef = React.useRef('');
   const savedMenuRef = React.useRef('');
+  const savedAssignedToRef = React.useRef('');
 
   useEffect(() => {
     const fetchInitial = async () => {
@@ -103,15 +105,16 @@ const EditBug = () => {
 
         savedApplicationTypeRef.current = bug.applicationType || '';
         savedMenuRef.current = bug.menu || '';
+        savedAssignedToRef.current = assignedToId || '';
 
         reset({
           title: bug.title || '',
           description: bug.description || '',
           priority: bug.priority || 'Medium',
           project: projectId || '',
-          assignedTo: assignedToId || '',
-          applicationType: bug.applicationType || '',
-          menu: bug.menu || '',
+          assignedTo: '',
+          applicationType:  '',
+          menu: '',
         });
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load bug');
@@ -139,6 +142,12 @@ const EditBug = () => {
         appTypes.push(savedApplicationTypeRef.current);
       }
       setApplicationTypes(appTypes);
+      if (savedAssignedToRef.current) {
+      setValue('assignedTo', savedAssignedToRef.current);
+    }
+    if (savedApplicationTypeRef.current) {
+      setValue('applicationType', savedApplicationTypeRef.current);
+    }
     } else {
       setDevelopers([]);
       setApplicationTypes([]);
@@ -161,7 +170,7 @@ const EditBug = () => {
     } else {
       setMenus([]);
     }
-  }, [selectedProjectId, selectedApplicationType, projects]);
+  }, [selectedProjectId, selectedApplicationType, projects, setValue]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
